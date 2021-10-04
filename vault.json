@@ -1,0 +1,12 @@
+{
+    "robotsparebin": {
+      "username": "maria",
+      "password": "thoushallnotpass"
+    },
+    "exitmessage": {
+      "message": "You have chosen to exit. Thank you for using my program and I wish you a very pleasant day!"
+    },
+    "failexitmessage": {
+      "message": "The menu has exited in an non-standard way. We apologize for the inconvenience."
+    }
+  }
