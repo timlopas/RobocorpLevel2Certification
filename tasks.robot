@@ -71,8 +71,16 @@ Save Order HTML
 
 *** Keywords ***
 Save Preview Image
+    [Arguments]    ${order_number}
     Wait Until Element Is Visible    id:robot-preview
-    ${robot_preview}=    Capture Element Screenshot    id:robot-preview-image
+    #Noticed a scenario where the preview locator was visable but the images were not fully loading resulting in incomplete screenshots
+    Wait Until Element Is Visible    css:img[alt="Head"]
+    Wait Until Element Is Visible    css:img[alt="Body"]
+    Wait Until Element Is Visible    css:img[alt="Legs"]
+    #Setting the output directory directly for the screenshot; Also saving them in a sub-directory to ensure they are not part of the ZIP file
+    #The default in Robocorp Lab appears to be a temp file which returns a full path
+    #while the default in VS is EMBED which does not return a path
+    ${robot_preview}=    Capture Element Screenshot    id:robot-preview-image    	${OUTPUTDIR}${/}screenshots${/}robot-order-${order_number}.png
     [Return]    ${robot_preview}
 
 *** Keywords ***
@@ -118,7 +126,7 @@ Input Orders Into RobotSpareBin Website
         Click Order Button
         If Error Appears    css:div[role="alert"]
         #Saving the image and Order PDF once on the order page
-        ${robot_image}=    Save Preview Image
+        ${robot_image}=    Save Preview Image    ${order_data}[Order number]
         ${order_receipt}=    Save Order HTML
         Create PDF From Order HTML And Preview Image    ${order_receipt}    ${robot_image}      ${order_number}
         Click Order Another Robot
